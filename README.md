@@ -2,7 +2,7 @@
 
 ## NOTE
 
-This template has been made for Google Actions. Alexa support is also prepared but not testet. Feel free to elaborate.
+This template has been made for Google Actions. Alexa support is also prepared but not tested. Feel free to elaborate.
 
 ## SETUP
  
