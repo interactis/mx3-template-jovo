@@ -1,0 +1,17 @@
+{
+  "translation": {
+    "i18n_launch_first_welcome_message_speech": "Hello! Here is a test song.",
+    "i18n_launch_welcome_message_speech": [
+      "Hello, welcome back! Here is a test song.",
+      "Hi, here is a test song."
+    ],
+    "i18n_unhandled_speech": [
+      "Sorry, I couldn't understand.",
+      "Could you please repeat?"
+    ],
+    "i18n_help_speech": "Add help instructions here.",
+    "i18n_pause_speech": "Paused.",
+    "i18n_quit_speech": "Goodby.",
+    "i18n_resume_speech": "Here we go."
+  }
+}

@@ -1,0 +1,46 @@
+{
+	"alexaSkill": {
+		"nlu": "alexa",
+		"manifest": {
+			"apis": {
+				"custom": {
+					"interfaces": [
+						{
+							"type": "AUDIO_PLAYER"
+						}
+					]
+				}
+			}
+		}
+	},
+	"googleAction": {
+		"nlu": {
+			"name": "dialogflow"
+		}
+	},
+	"endpoint": "${JOVO_WEBHOOK_URL}",
+	"defaultStage": "dev",
+	"stages": {
+		"dev": {
+			"config": {
+				"db": {
+					"type": "file",
+					"localDbFilename": "db"
+				}
+			}
+		},
+		"prod": {
+			"config": {
+				"db": {
+					"type": "dynamodb",
+					"tableName": "mx3-prod",
+					"awsConfig": {
+						"accessKeyId": "",
+						"secretAccessKey": "",
+						"region":  "eu-central-1"
+					}
+				}
+			}
+		}
+	}
+}

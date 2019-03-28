@@ -1,0 +1,71 @@
+{
+  "invocation": "mx three",
+  "intents": [
+    {
+      "name": "HelpIntent",
+      "webhookUsed": true,
+      "dialogflow": {
+        "priority": 500000
+      },
+      "alexa": {
+        "name": "AMAZON.HelpIntent"
+      },
+      "phrases": [
+        "help",
+        "please help",
+        "what can I do?"
+      ]
+    },
+    {
+      "name": "QuitIntent",
+      "webhookUsed": true,
+      "dialogflow": {
+        "priority": 500000
+      },
+      "alexa": {
+        "name": "AMAZON.StopIntent"
+      },
+      "phrases": [
+        "stop",
+        "close"
+      ]
+    }
+  ],
+  "alexa": {
+    "interactionModel": {
+      "languageModel": {
+        "intents": [
+          {
+            "name": "AMAZON.CancelIntent",
+            "samples": []
+          }
+        ]
+      }
+    }
+  },
+  "dialogflow": {
+    "intents": [
+      {
+        "name": "Default Fallback Intent",
+        "auto": true,
+        "webhookUsed": true,
+        "fallbackIntent": true,
+        "smalltalk": true
+      },
+      {
+        "name": "Default Welcome Intent",
+        "auto": true,
+        "webhookUsed": true,
+        "events": [
+          {
+            "name": "WELCOME"
+          },
+          {
+            "name": "GOOGLE_ASSISTANT_WELCOME"
+          }
+        ]
+      }
+    ]
+  },
+  "inputTypes": []
+}
