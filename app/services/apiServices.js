@@ -8,23 +8,7 @@ const GlobalDdb = Dynasty.table(process.env.STAGE === "prod" ? Config.AWS_DYNAMO
 
 class ApiServices
 {        
-   
-    static async getSingle(singleId)
-    {
-    	let response = await this.getSingleToken(singleId);
-    	if (!response) {
-            return null
-        }
-        
-        let token = response.response.token.value;
-        let stream = await this.getStream(token);
-        if (!stream) {
-            return null
-        }
-		
-		return stream;
-    }
-    
+
     static async getSingleToken(singleId) 
     {
         let url = Config.API_BASE_URL +'singles/'+ singleId +'/token';
@@ -39,6 +23,8 @@ class ApiServices
 		return response;
     }
     
+    /*
+    // This function is working, but the player can't handle the response.
     static async getStream(token) 
     {
     	let url = Config.API_BASE_URL +'streams/'+ token;
@@ -51,6 +37,7 @@ class ApiServices
         }	
 		return stream;
     }
+    */
     
   	static async doGetRequest(url, parseJson)
 	{

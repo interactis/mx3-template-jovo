@@ -8,46 +8,32 @@ module.exports = {
 
     'LAUNCH': function () {
         console.log("LAUNCH INTENT");
-        
-        // Set the test user, since there is no multi-user in the prototyp, yet.
-        this.user().data.id = Config.TEST_USER_ID;
-        
-        // Hold new launch
-        this.user().data.lastLaunchDate = new Date();
 		
-		// Pass the id of the single:
-		ApiServices.getSingle(335152).then((stream) => {
+		// Pass the id of a single:
+		ApiServices.getSingleToken(335152).then((data) => {
 			
-			if (stream) {
-				PlayMedia.play(stream, 'Test', this);
+			let speech = this.speechBuilder();
+			
+			if (data) {
+				let token = data.response.token.value;
+				let streamUrl = Config.API_BASE_URL +'streams/'+ token;
+				console.log(" >>> Stream URL = " + streamUrl);
+				
+				speech = speech.addT("i18n_launch_welcome_message_speech");
+				
+				/*
+				Playback is currently not working.
+				The problem is that the streamUrl above requires Basic Authorization.
+				But the player cannot handle Basic Authorization.
+				The SRG SSR API must be adjusted in order to make the playback work.
+				*/	
+				
+				PlayMedia.play(streamUrl, speech, this);
 			}
 			else {
-				// Error, no stream
+				speech = speech.addT("i18n_unhandled_speech");
+				this.tell(speech);
 			}
-			
-			
-			
-			/*
-			if (audioData) {
-			
-				// Set welcome speech
-				let sessionsCount = this.user().metaData.sessionsCount;
-			
-				if (sessionsCount > 0 && !audioData.play_welcome_message) {
-					speech = speech.addT("i18n_launch_welcome_message_speech");
-				}
-				else {
-					speech = speech.addT("i18n_launch_first_welcome_message_speech");
-				}
-			
-				PlayMedia.play(this.user(), audioData, speech +" "+ audioData.title, this, ["Weiter", "Mehr zum Thema", "Diesem Thema folgen"]);
-			}
-			else {
-				// required in prototype, remove as soon as stream is endless.
-        		speech = speech.addT("i18n_end_of_stream_speech");
-        		this.tell(speech);
-        	}
-        	*/
 		});
     },
     

@@ -2,7 +2,14 @@
 
 class PlayMedia {
 
-    static play(stream, speech, context) {
+    static play(url, speech, context) {
+    
+    	/*
+		Playback is currently not working.
+		The problem is that the URL of the audio requires Basic Authorization.
+		But the player cannot handle Basic Authorization.
+		The SRG SSR API must be adjusted in order to make the playback work.
+		*/	
 		
 		console.log(" >>> Start playing ...");
 		
@@ -13,11 +20,11 @@ class PlayMedia {
                 .setTitle('Test Song')
                 .setSubtitle('Test Description')
                 //.addArtwork(imageUrl)
-                .play(stream, 'token')
+                .play(url, 'token')
                 .tell(speech);
         }
         else {
-            context.googleAction().audioPlayer().play(stream, 'Test Song', {
+            context.googleAction().audioPlayer().play(url, 'Test Song', {
                 "description": "Test Song",
                 //"icon": {"url": imageUrl, "alt": accessibilityText}
             });
