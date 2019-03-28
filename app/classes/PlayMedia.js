@@ -26,8 +26,9 @@ class PlayMedia {
         else {
             context.googleAction().audioPlayer().play(url, 'Test Song', {
                 "description": "Test Song",
-                //"icon": {"url": imageUrl, "alt": accessibilityText}
+                // "icon": {"url": imageUrl, "alt": accessibilityText}
             });
+         	context.googleAction().showSuggestionChips(['Help']);
             context.googleAction().ask(speech);
         }
     }
