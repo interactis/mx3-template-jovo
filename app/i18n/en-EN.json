@@ -5,7 +5,7 @@
       "Hi, here is a test song."
     ],
     "i18n_unhandled_speech": [
-      "Sorry, I couldn't understand.",
+      "Sorry, I couldn't understand. Could you please repeat?",
       "Could you please repeat?"
     ],
     "i18n_help_speech": "Add help instructions here.",
