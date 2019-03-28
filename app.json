@@ -33,7 +33,7 @@
 			"config": {
 				"db": {
 					"type": "dynamodb",
-					"tableName": "mx3-prod",
+					"tableName": "mx3-data-dev",
 					"awsConfig": {
 						"accessKeyId": "",
 						"secretAccessKey": "",

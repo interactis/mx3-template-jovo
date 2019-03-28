@@ -15,13 +15,19 @@ module.exports = {
         // Hold new launch
         this.user().data.lastLaunchDate = new Date();
 		
-		
-		this.tell('Test');
-		
-		/*
-		ApiServices.getAudio(this.user()).then((audioData) => {
-			let speech = this.speechBuilder();
+		// Pass the id of the single:
+		ApiServices.getSingle(335152).then((stream) => {
 			
+			if (stream) {
+				PlayMedia.play(stream, 'Test', this);
+			}
+			else {
+				// Error, no stream
+			}
+			
+			
+			
+			/*
 			if (audioData) {
 			
 				// Set welcome speech
@@ -41,9 +47,8 @@ module.exports = {
         		speech = speech.addT("i18n_end_of_stream_speech");
         		this.tell(speech);
         	}
+        	*/
 		});
-		
-		*/
     },
     
     'HelpIntent': function () {

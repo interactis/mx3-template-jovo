@@ -2,26 +2,25 @@
 
 class PlayMedia {
 
-    static play(user, data, speech, context, suggestionChips) {
+    static play(stream, speech, context) {
 		
-		user.data.lastPlayed = user.data.nowPlaying;
-		user.data.nowPlaying = data;
+		console.log(" >>> Start playing ...");
 		
         // Play audio depending of the platform
         if (context.getType() === "AlexaSkill") {
             context.alexaSkill().audioPlayer()
                 .setOffsetInMilliseconds(0)
-                .setTitle(data.title)
-                .setSubtitle(data.type)
-                //.addArtwork(data.imageUrl)
-                .play(data.url, 'token')
+                .setTitle('Test Song')
+                .setSubtitle('Test Description')
+                //.addArtwork(imageUrl)
+                .play(stream, 'token')
                 .tell(speech);
-        } else {
-            context.googleAction().audioPlayer().play(data.url, data.title, {
-                "description": data.type,
-                //"icon": {"url": data.imageUrl, "alt": data.accessibilityText}
+        }
+        else {
+            context.googleAction().audioPlayer().play(stream, 'Test Song', {
+                "description": "Test Song",
+                //"icon": {"url": imageUrl, "alt": accessibilityText}
             });
-            context.googleAction().showSuggestionChips(suggestionChips);
             context.googleAction().ask(speech);
         }
     }

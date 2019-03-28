@@ -2,51 +2,35 @@
 
 const request = require('request-promise');
 const Config = require('../config');
+const Utils = require('../classes/utils');
+const Dynasty = require('dynasty')(Config.AWS_CONFIG);
+const GlobalDdb = Dynasty.table(process.env.STAGE === "prod" ? Config.AWS_DYNAMODB_TABLE_PROD : Config.AWS_DYNAMODB_TABLE_DEV);
 
 class ApiServices
 {        
-    static async getAudio(user)
+   
+    static async getSingle(singleId)
     {
-    	let url = Config.API_URL +'audio/next/'+ user.data.id;
-    	console.log(" >>> getAudio - url = " + url);
-    	
-    	let response = await this.doGetRequest(url);
-    	// console.log(JSON.stringify(response));
-    	
+    	let response = await this.getSingleToken(singleId);
     	if (!response) {
             return null
-        }	
-		return response;
-    }
-    
-    static async next(user)
-    {
-    	let url = Config.API_URL +'audio/skip/'+ user.data.nowPlaying.id;
-    	console.log(" >>> skip - url = " + url);
-    	
-    	let postData = {
-    		userId: user.data.id
-    	}
-    	
-    	let response = await this.doPostRequest(url, postData);
-    	// console.log(JSON.stringify(response));
-    	
-    	if (!response) {
+        }
+        
+        let token = response.response.token.value;
+        let stream = await this.getStream(token);
+        if (!stream) {
             return null
-        }	
-		return response;
+        }
+		
+		return stream;
     }
     
-    static async more(user)
+    static async getSingleToken(singleId) 
     {
-    	let url = Config.API_URL +'audio/morebyaudioid/'+ user.data.nowPlaying.id;
-    	console.log(" >>> more - url = " + url);
-    	
-    	let postData = {
-    		userId: user.data.id
-    	}
-    	
-    	let response = await this.doPostRequest(url, postData);
+        let url = Config.API_BASE_URL +'singles/'+ singleId +'/token';
+        console.log(" >>> getSingleToken - url = " + url);
+        
+        let response = await this.doGetRequest(url, true);
     	console.log(JSON.stringify(response));
     	
     	if (!response) {
@@ -55,50 +39,30 @@ class ApiServices
 		return response;
     }
     
-    static async follow(user)
+    static async getStream(token) 
     {
-    	let url = Config.API_URL +'audio/follow/'+ user.data.nowPlaying.id;
-    	console.log(" >>> follow - url = " + url);
-    	
-    	let postData = {
-    		userId: user.data.id
-    	}
-    	
-    	let response = await this.doPostRequest(url, postData);
-    	// console.log(JSON.stringify(response));
-    	
-    	if (!response) {
+    	let url = Config.API_BASE_URL +'streams/'+ token;
+		console.log(" >>> getStream - url = " + url);
+			
+        let stream = await this.doGetRequest(url, false);
+    
+    	if (!stream) {
             return null
         }	
-		return response;
+		return stream;
     }
     
-    static async audioCompleted(user)
-    {
-    	let url = Config.API_URL +'audio/completed/'+ user.data.nowPlaying.id;
-    	console.log(" >>> audio completed - url = " + url);
-    	
-    	let postData = {
-    		userId: user.data.id
-    	}
-    	
-    	let response = await this.doPostRequest(url, postData);
-    	// console.log(JSON.stringify(response));
-    	
-    	if (!response) {
-            return null
-        }	
-		return response;
-    }
-	
-	static async doGetRequest(url)
+  	static async doGetRequest(url, parseJson)
 	{
+		let accessToken = await this.getAccessToken();
+		
 		let options = {
 			uri: url,
 			headers: {
+				'Authorization': 'Bearer '+  accessToken,
 				'accept': 'application/json'
 			},
-			json: true // Automatically parses the JSON string in the response
+			json: parseJson // Automatically parses the JSON string in the response
 		};
 		
 		try {
@@ -109,22 +73,72 @@ class ApiServices
 		}
 	}
 	
-	static async doPostRequest(url, postData)
-	{
-		let options = {
-			method: 'POST',
-			uri: url,
-			form: postData,
-			json: true // Automatically parses the JSON string in the response
-		};
+    static async getAccessToken()
+    {   
+    	let token = await this.getAccessTokenFromDB();
+    	
+    	console.log(" >>> DB TOKEN : " + token);
+    	
+    	if (!token) {
+			let authString = Config.API_SRGSSR_CONSUMER_KEY +':'+ Config.API_SRGSSR_CONSUMER_SECRET;
+			let base64String = Buffer.from(authString).toString('base64');
+	
+			let options = {
+				method: 'POST',
+				uri: Config.API_SRGSSR_ACCESS_TOKEN_URL,
+				headers: {
+					'Authorization': 'Basic '+ base64String,
+					'Cache-Control': 'no-cache',
+					'Content-Length': 0
+				},
+				json: true // Automatically parses the JSON string in the response
+			};
 		
-		try {
-			return await request(options);
+			let response = await request(options);
+
+			console.log(" >>> ACCESS TOKEN - JSON : " + JSON.stringify(response));
+			
+			this.saveAccessTokenToDB(response);
+			return response.access_token;
 		}
-		catch (error) {
-			return null;
+		else {
+			return token
 		}
-	}
+    }
+    
+    static async getAccessTokenFromDB()
+    {
+    	return GlobalDdb.find(Config.AWS_SRG_SSR_ACCESS_TOKEN)
+        	.then(function (response) {
+        		console.log(" >>> DB RESPONSE TOKEN : "+ JSON.stringify(response));
+                if (Utils.isEmpty(response)) {
+                    return false;
+                }
+                else {
+                	let buffer = 86400*2; // 2 days
+                	let expireTime = Number(response.expires_at) - buffer;
+             	
+                	if (Utils.currentTimestamp() > expireTime) {
+                		console.log(" >>> TOKEN EXPIRED ");
+                		return false;
+                	}
+                	else {
+                		return response.token;
+                	}
+                }
+            });
+    }
+    
+    static saveAccessTokenToDB(tokenJson)
+    {
+    	GlobalDdb.update(Config.AWS_SRG_SSR_ACCESS_TOKEN, {
+    		token: tokenJson.access_token,
+    		created_at: Math.round((new Date()).getTime() / 1000),
+    		expires_at: Number(Utils.currentTimestamp()) + Number(tokenJson.expires_in),
+    	}).then(function(response) {
+        	console.log(" >>> ACCESS TOKEN - SAVED : "+ JSON.stringify(response));
+    	});
+    }
 }
 
 module.exports = ApiServices;
