@@ -4,8 +4,9 @@
 
 This template has been made for Google Actions. Alexa support is also prepared but not tested. Feel free to elaborate.
 
-## SETUP
+IMPORTANT: The audio playback is currently not working. The problem is, that the audio stream URL of the SRG SSR API requires Basic Authorization. But the Jovo player cannot handle Basic Authorization. The SRG SSR API must be adjusted in order to make the playback work.
 
+## SETUP
 
 ### AWS
 
@@ -23,7 +24,7 @@ Some data will be stored in a AWS Dynamo DB. Please follow these steps to set it
 2. Go to the app directory and run `npm install`
 3. Go to the directory `/app`. Copy `config-example.js` and rename it to `config.js`
 4. Set the params in `config.js`. Use the AWS access keys you got above (see above: `AWS`, point #4)
-5. Go back to the root directory of the app and use the command `jovo build'
+5. Go back to the root directory of the app and use the command `jovo build`
 6. Zip the directory `platforms/googleAction`
 7. Go to [https://console.dialogflow.com/] and login or create an account
 8. Create a new agent, name it `mx3`, select `English` as default language and `Create a new Google project`
