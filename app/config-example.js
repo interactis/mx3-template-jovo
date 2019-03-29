@@ -18,8 +18,11 @@ module.exports = Object.freeze({
     API_SRGSSR_ACCESS_TOKEN_URL: "https://api.srgssr.ch/oauth/v1/accesstoken?grant_type=client_credentials",
     
     API_BASE_URL: 'https://api.srgssr.ch/mx3/v2/'
+    
+    // This is a temporary endpoint without oauth,
+    // because smart speaker can't handle oauth in stream playback
+    API_BASE_URL_FOR_STREAMS: 'https://api.srgssr.ch/mx3-srf/v2/'
    
 	// If needed, add more configs here
 	
-
 });

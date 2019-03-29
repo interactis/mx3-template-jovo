@@ -4,13 +4,6 @@ class PlayMedia {
 
     static play(url, speech, context) {
     
-    	/*
-		Playback is currently not working.
-		The problem is that the URL of the audio requires Basic Authorization.
-		But the player cannot handle Basic Authorization.
-		The SRG SSR API must be adjusted in order to make the playback work.
-		*/	
-		
 		console.log(" >>> Start playing ...");
 		
         // Play audio depending of the platform

@@ -16,18 +16,10 @@ module.exports = {
 			
 			if (data) {
 				let token = data.response.token.value;
-				let streamUrl = Config.API_BASE_URL +'streams/'+ token;
+				let streamUrl = Config.API_BASE_URL_FOR_STREAMS +'streams/'+ token +'?apikey='+ Config.API_SRGSSR_CONSUMER_KEY;
 				console.log(" >>> Stream URL = " + streamUrl);
 				
 				speech = speech.addT("i18n_launch_welcome_message_speech");
-				
-				/*
-				Playback is currently not working.
-				The problem is that the streamUrl above requires Basic Authorization.
-				But the player cannot handle Basic Authorization.
-				The SRG SSR API must be adjusted in order to make the playback work.
-				*/	
-				
 				PlayMedia.play(streamUrl, speech, this);
 			}
 			else {

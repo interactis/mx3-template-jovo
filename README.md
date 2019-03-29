@@ -4,8 +4,6 @@
 
 This template has been made for Google Actions. Alexa support is also prepared but not tested. Feel free to elaborate.
 
-IMPORTANT: The audio playback is currently not working. The problem is, that the audio stream URL of the SRG SSR API requires Basic Authorization. But the Jovo player cannot handle Basic Authorization. The SRG SSR API must be adjusted in order to make the playback work.
-
 ## SETUP
 
 ### AWS
