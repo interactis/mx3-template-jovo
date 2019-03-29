@@ -15,6 +15,9 @@ Some data will be stored in a AWS Dynamo DB. Please follow these steps to set it
 3. Create a new Dynamo DB: `Services` => `DynamoDB` => `Create Table`, name the table `mx3-data-dev`.
 4. Get the AWS access keys like so: https://datapath.io/resources/blog/how-to-get-your-aws-access-key-and-secret-access-key/
 
+### Jovo framework
+
+Setup Jovo: [https://www.jovo.tech/docs/installation]
  
 ### Google Action
 
@@ -32,5 +35,3 @@ Some data will be stored in a AWS Dynamo DB. Please follow these steps to set it
 12. Select `Integrations` in the side menu and click on `Google Assistant`, click on `Test` on the bottom of the overlay. This will create a new Actions on Google Project.
 13. Start the webhook on your local computer with the command `jovo run --watch`
 14. Start testing on `https://console.actions.google.com/project/mx3/simulator/`
-
-
