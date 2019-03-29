@@ -6,6 +6,10 @@ This template has been made for Google Actions. Alexa support is also prepared b
 
 ## SETUP
 
+### Jovo framework
+
+Setup Jovo: [https://www.jovo.tech/docs/installation]
+
 ### AWS
 
 Some data will be stored in a AWS Dynamo DB. Please follow these steps to set it up:
@@ -14,10 +18,6 @@ Some data will be stored in a AWS Dynamo DB. Please follow these steps to set it
 2. Login to your AWS console: [https://console.aws.amazon.com/]
 3. Create a new Dynamo DB: `Services` => `DynamoDB` => `Create Table`, name the table `mx3-data-dev`.
 4. Get the AWS access keys like so: https://datapath.io/resources/blog/how-to-get-your-aws-access-key-and-secret-access-key/
-
-### Jovo framework
-
-Setup Jovo: [https://www.jovo.tech/docs/installation]
  
 ### Google Action
 
